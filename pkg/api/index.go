@@ -19,7 +19,7 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 	_, span := s.tracer.Start(r.Context(), "indexHandler")
 	defer span.End()
 
-	tmpl, err := template.New("vue.html").ParseFS(assets.FS, "ui/vue.html")
+	tmpl, err := template.New("vue.html").ParseFS(assets.AssetsFS, "ui/vue.html")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(path.Join(s.config.UIPath, "vue.html") + err.Error()))

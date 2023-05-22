@@ -134,7 +134,8 @@ func (s *Server) registerHandlers() {
 		}
 		w.Write([]byte(doc))
 	})
-	s.router.PathPrefix("/ui/").HandlerFunc(setHeader("Content-Type", "text/css", http.FileServer(http.FS(assets.FS))))
+	s.router.PathPrefix("/static/").Handler(http.FileServer(http.FS(assets.StaticFS)))
+	s.router.PathPrefix("/ui/").HandlerFunc(setHeader("Content-Type", "text/css", http.FileServer(http.FS(assets.AssetsFS))))
 }
 
 func setHeader(header, value string, handle http.Handler) func(http.ResponseWriter, *http.Request) {

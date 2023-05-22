@@ -2,7 +2,12 @@ package assets
 
 import "embed"
 
-// FS contains assets
+// AssetsFS contains assets
 //
 //go:embed ui
-var FS embed.FS
+var AssetsFS embed.FS
+
+// StaticFS continas Static
+//
+//go:embed static
+var StaticFS embed.FS
