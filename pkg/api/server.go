@@ -15,6 +15,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	_ "github.com/stefanprodan/podinfo/pkg/api/docs"
+	"github.com/stefanprodan/podinfo/pkg/assets"
 	"github.com/stefanprodan/podinfo/pkg/fscache"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/swaggo/swag"
@@ -133,6 +134,16 @@ func (s *Server) registerHandlers() {
 		}
 		w.Write([]byte(doc))
 	})
+	s.router.PathPrefix("/ui/").HandlerFunc(setHeader("Content-Type", "text/css", http.FileServer(http.FS(assets.FS))))
+}
+
+func setHeader(header, value string, handle http.Handler) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, req *http.Request) {
+		if strings.Contains(req.URL.Path, ".css") {
+			w.Header().Set(header, value)
+		}
+		handle.ServeHTTP(w, req)
+	}
 }
 
 func (s *Server) registerMiddlewares() {

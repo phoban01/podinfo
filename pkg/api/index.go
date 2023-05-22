@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"net/http"
 	"path"
+
+	"github.com/stefanprodan/podinfo/pkg/assets"
 )
 
 // Index godoc
@@ -17,7 +19,7 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 	_, span := s.tracer.Start(r.Context(), "indexHandler")
 	defer span.End()
 
-	tmpl, err := template.New("vue.html").ParseFiles(path.Join(s.config.UIPath, "vue.html"))
+	tmpl, err := template.New("vue.html").ParseFS(assets.FS, "ui/vue.html")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(path.Join(s.config.UIPath, "vue.html") + err.Error()))
